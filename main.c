@@ -5,14 +5,15 @@
 #include <math.h>
 
 
-/* NIST B-409 Base x values, Base y values*/
+/* missing - / + and r^2 / a^2 */
 
 __m256  _ZGVcN8v_sinf(__m256 x);
 __m256  _ZGVcN8v_cosf(__m256 x);
 
 typedef struct spiral {
   __m256 viv, vivsq, va, vasq;
-  __m256 x, y;
+  __m256 x, y, r0, r1;
+  float b[8];
 
 
  } spiral;
@@ -21,38 +22,53 @@ typedef struct spiral {
 void a(){
 
     spiral sx;
-    float f[8];
 
-    sx.viv = _mm256_set_ps(0x0273c706, 0x81c364ba, 0xd2181b36, 0xdf4b4f40, 0x38514f1f, 0x5488d08f, 0x0158aa4f, 0xa7bd198d);
+    sx.viv = _mm256_set_ps(2.0f, 4.0f, 8.0f, 16.0f, 32.0f, 64.0f, 128.0f, 256.0 );
     sx.viv = _ZGVcN8v_cosf(sx.viv);
     sx.vivsq = _mm256_sqrt_ps(sx.viv);
     sx.x = _mm256_mul_ps(sx.viv , sx.vivsq);
-    _mm256_storeu_ps(f, sx.x);
 
-    printf("%12.8f %12.8f %12.8f %12.8f %12.8f %12.8f %12.8f %12.8f\n", f[0], f[1], f[2], f[3], f[4], f[5], f[6], f[7]);
+
+    printf("%12.8f %12.8f \n", sx.x[2], sx.x[3]);
 }
 
 void b(){
 
     spiral sx;
-    float f[8];
 
-    sx.va = _mm256_set_ps(0xbb7996a7, 0x60794e54, 0x5603aeab, 0x8a118051, 0xdc255a86, 0x34e59703, 0xb01ffe5b, 0xf1771d4d);
+    sx.va = _mm256_set_ps(2.0f, 4.0f, 8.0f, 16.0f, 32.0f, 64.0f, 128.0f, 256.0f);
     sx.va = _ZGVcN8v_sinf(sx.va);
     sx.vasq = _mm256_sqrt_ps(sx.va);
     sx.y = _mm256_mul_ps(sx.va , sx.vasq);
-   _mm256_storeu_ps(f, sx.y);
 
-    printf("%12.8f %12.8f %12.8f %12.8f %12.8f %12.8f %12.8f %12.8f\n", f[0], f[1], f[2], f[3], f[4], f[5], f[6], f[7]);
+    printf("%12.8f %12.8f \n", sx.y[2], sx.y[3]);
 }
 
+void c() {
 
 
-int main(){
+    spiral sx;
+
+ 
+
+    sx.r0 = _mm256_mul_ps(sx.x, sx.x);
+    sx.r1 = _mm256_mul_ps(sx.y, sx.y);
+
+    sx.r0 = _mm256_sqrt_ps(sx.r0);
+    sx.r1 = _mm256_sqrt_ps(sx.r1);
+
+    sx.r0 = _mm256_add_ps(sx.r0, sx.r1);
+   _mm256_storeu_ps(sx.b, sx.r0);
+
+   printf("%12.8f, %12.8f \n", sx.b[2], sx.b[3]);
+
+}
+
+void main(){
 
  spiral sx;
 
  a();
  b();
- return 0;
+ c();
 }
