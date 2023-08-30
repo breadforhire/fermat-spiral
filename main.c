@@ -61,17 +61,18 @@ void c() {
 
 
    sx.a = _mm256_mul_ps(sx.b, sx.a);
-   sx.r0 = _mm256_div_ps(sx.a, sx.y); // r * sqrt k / k
+   sx.a = _mm256_div_ps(sx.a, sx.y); // r * sqrt k / k
    sx.a = _mm256_mul_ps(sx.a, sx.a);
 
-   sx.r0 = _ZGVcN8v_cosf(sx.r0);
+
+   sx.r0 = _ZGVcN8v_cosf(sx.va);
    sx.r1 = _ZGVcN8v_sinf(sx.a);
 
 
    sx.r1 = _mm256_div_ps(sx.r0, sx.r1);
 
 
-   printf("%12.8f slope  %12.8f  %12.8f   %12.8f  %12.8f  %12.8f  %12.8f  %12.8f slope    \n   ",  sx.r1[1], sx.r1[2], sx.r1[3], sx.r1[4], sx.r1[5] - 1, sx.r1[6], sx.r1[7], sx.r1[0]);
+   printf("cot %12.8f slope  %12.8f  %12.8f   %12.8f  %12.8f  %12.8f  %12.8f  %12.8f slope    \n   ",  sx.r1[1], sx.r1[2], sx.r1[3], sx.r1[4], sx.r1[5] , sx.r1[6], sx.r1[7], sx.r1[0]);
 
 
 }
