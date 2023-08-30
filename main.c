@@ -28,8 +28,7 @@ void a(){
     sx.vivsq = _mm256_sqrt_ps(sx.vivx);
     sx.x = _mm256_mul_ps(sx.viv , sx.vivsq);
 
-
-   printf("%12.8f x  %12.8f x %12.8f x  %12.8f x %12.8f x %12.8f x %12.8f x %12.8f x    \n   ",  sx.x[1], sx.x[2], sx.x[3], sx.x[4], sx.x[5], sx.x[6], sx.x[7], sx.x[0]);
+   printf("%12.8f x  %12.8f x %12.8f x  %12.8f x %12.8f x %12.8f x %12.8f x %12.8f x    \n   ",  sx.x[1], sx.x[2], sx.x[3], sx.x[4], sx.x[5], sx.x[6] + 1, sx.x[7], sx.x[0]);
 }
 
 void b(){
@@ -57,10 +56,12 @@ void c() {
     sx.r1 = _mm256_mul_ps(sx.y, sx.y);
 
     sx.va = _mm256_add_ps(sx.r1, sx.r0);
+
     sx.b = _mm256_sqrt_ps(sx.va);
 
 
    sx.a = _mm256_mul_ps(sx.b, sx.a);
+
    sx.a = _mm256_div_ps(sx.a, sx.y); // r * sqrt k / k
    sx.a = _mm256_mul_ps(sx.a, sx.a);
 
