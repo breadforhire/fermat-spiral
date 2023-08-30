@@ -12,10 +12,11 @@ __m256  _ZGVcN8v_cosf(__m256 x);
 
 typedef struct spiral {
   __m256 viv, vivx, vivsq, va, vax, vasq;
-  __m256 x, y, r0, r1, b, a;
+  __m256 x, y, r0, r1, a, b;
 
 
  } spiral;
+
 
 
 void a(){
@@ -28,7 +29,7 @@ void a(){
     sx.x = _mm256_mul_ps(sx.viv , sx.vivsq);
 
 
-    printf("%12.8f x %12.8f x \n", sx.x[2], sx.x[3]);
+   printf("%12.8f x  %12.8f x %12.8f x  %12.8f x %12.8f x %12.8f x %12.8f x %12.8f x    \n   ",  sx.x[1], sx.x[2], sx.x[3], sx.x[4], sx.x[5], sx.x[6], sx.x[7], sx.x[0]);
 }
 
 void b(){
@@ -40,7 +41,8 @@ void b(){
     sx.vasq = _mm256_sqrt_ps(sx.vax);
     sx.y = _mm256_mul_ps(sx.va , sx.vasq);
 
-    printf("%12.8f y %12.8f y \n", sx.y[2], sx.y[3]);
+
+    printf("%12.8f y  %12.8f y %12.8f y  %12.8f y %12.8f y %12.8f y %12.8f y %12.8f y    \n   ",  sx.y[1], sx.y[2], sx.y[3], sx.y[4], sx.y[5], sx.y[6], sx.y[7], sx.y[0]);
 }
 
 void c() {
@@ -48,24 +50,30 @@ void c() {
 
     spiral sx;
 
- 
+
+    sx.a = _mm256_sqrt_ps(sx.y);
 
     sx.r0 = _mm256_mul_ps(sx.x, sx.x);
     sx.r1 = _mm256_mul_ps(sx.y, sx.y);
 
-    sx.a = _mm256_mul_ps(sx.a, sx.a);
-    sx.b = _mm256_add_ps(sx.r0, sx.r1);
+    sx.va = _mm256_add_ps(sx.r1, sx.r0);
+    sx.b = _mm256_sqrt_ps(sx.va);
 
-   printf("%12.8f c, %12.8f c \n", sx.b[2], sx.b[3]);
 
-   sx.r0 = _mm256_div_ps(sx.b, sx.a);
+   sx.a = _mm256_mul_ps(sx.b, sx.a);
+   sx.r0 = _mm256_div_ps(sx.a, sx.y); // r * sqrt k / k
+   sx.a = _mm256_mul_ps(sx.a, sx.a);
 
    sx.r0 = _ZGVcN8v_cosf(sx.r0);
-   sx.r1 = _ZGVcN8v_sinf(sx.r0);
+   sx.r1 = _ZGVcN8v_sinf(sx.a);
 
-   sx.a = _mm256_div_ps(sx.r0, sx.r1);
 
-   printf("slope: %12.8f \n", sx.a[0]);
+   sx.r1 = _mm256_div_ps(sx.r0, sx.r1);
+
+
+   printf("%12.8f slope  %12.8f  %12.8f   %12.8f  %12.8f  %12.8f  %12.8f  %12.8f slope    \n   ",  sx.r1[1], sx.r1[2], sx.r1[3], sx.r1[4], sx.r1[5] - 1, sx.r1[6], sx.r1[7], sx.r1[0]);
+
+
 }
 
 void main(){
