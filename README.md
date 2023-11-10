@@ -6,6 +6,8 @@ gcc -lmvec -mavx main.c -o main;
 
 
 
+polar coordinates
+
 
 ./main
 
