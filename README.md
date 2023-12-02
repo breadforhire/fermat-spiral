@@ -2,14 +2,21 @@
 fermat-spiral using avx intel vectors and precision test
 
 
-gcc -lmvec -mavx main.c -o main;
+ gcc -Wall -O3 -m64 -march=skylake libmvec_ex.c -lm 
 
 
 
-polar coordinates
 
 
-./main
+
+
+
+
+
+
+ 
+
+./a.out
 
 
 
